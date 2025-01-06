@@ -1,0 +1,81 @@
+
+input[type="text"],[type="email"],[type="password"] {
+    width: 100%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    background-color: transparent;
+    border: 1px solid var(--color-border);
+    border-radius: 10px;
+    font-size: 12pt;
+}
+
+input[type="text"]:focus,[type="email"]:focus,[type="password"]:focus {
+    background-color: transparent;
+    box-shadow: 0 0 0 2px var(--color-border-hover);
+}
+
+input[type="submit"], button[type="submit"] {
+    background-color: var(--vt-c-primary);
+    color: var(--vt-c-white);
+    padding: 10px 15px;
+    margin: 8px 0;
+    border: none;
+    font-size: 12pt;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+input[type="submit"]:hover, button[type="submit"]:hover {
+    background-color: var(--vt-c-primary-light);
+}
+
+button{
+    background-color: transparent;
+    color: var(--vt-c-primary);
+    padding: 10px 15px;
+    margin: 8px 0;
+    border: var(--vt-c-primary) 1px solid;
+    font-size: 12pt;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+button:hover{
+    background-color: var(--vt-c-primary);
+    color: var(--vt-c-white);
+}
+
+@media (prefers-color-scheme: dark) {
+    input[type="text"],[type="email"],[type="password"] {
+        background-color: var(--color-background-soft);
+        color: var(--color-text);
+        border: 1px solid var(--color-border);
+    }
+
+    input[type="text"]:focus,[type="email"]:focus,[type="password"]:focus {
+        background-color: var(--color-background-soft);
+        box-shadow: 0 0 0 2px var(--color-border-hover);
+    }
+
+    input[type="submit"], button[type="submit"] {
+        background-color: var(--vt-c-primary);
+        color: var(--vt-c-white);
+        border: none;
+    }
+
+    input[type="submit"]:hover, button[type="submit"]:hover {
+        background-color: var(--vt-c-primary-light);
+    }
+
+    button{
+        background-color: transparent;
+        color: var(--vt-c-primary-light);
+        border: var(--vt-c-primary-light) 1px solid;
+    }
+
+    button:hover{
+        background-color: var(--vt-c-primary);
+        color: var(--vt-c-white);
+        border: 1px solid var(--vt-c-primary);
+    }
+}
