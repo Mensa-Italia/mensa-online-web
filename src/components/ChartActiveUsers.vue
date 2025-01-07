@@ -33,7 +33,8 @@ const chartData = ref({
 });
 
 GetUserChart().then((data) => {
-  console.log(data);
+  //drop last value of data
+  data.pop();
   const labels = data.map((d) => d.day);
   const datasets = data.map((d) => d.users);
   chartData.value = {
@@ -103,7 +104,7 @@ const chartOptions = {
     <h3>Active Users</h3>
     <div class="chart-container">
       <div class="changed-value">
-        {{  Math.abs(chartData.datasets[0].data[chartData.datasets[0].data.length - 1] - chartData.datasets[0].data[chartData.datasets[0].data.length - 2]) }}
+        {{ chartData.datasets[0].data[chartData.datasets[0].data.length - 1] }}
       </div>
       <div class="chart-data">
         <Line
