@@ -1,54 +1,55 @@
 <script setup>
 
 import SideBar from "@/components/SideBar.vue";
-import {GetEvents, GetUser, FileUrl} from "@/api.js";
 import Topbar from "@/components/Topbar.vue";
 import EventBlock from "@/components/EventBlock.vue";
-import {ref} from "vue";
 import SideBarTile from "@/components/SideBarTile.vue";
+import ChartActiveUsers from "@/components/ChartActiveUsers.vue";
+import {useRouter} from "vue-router";
+import DocumentBlock from "@/components/DocumentBlock.vue";
+import {ref} from "vue";
+import {GetDocuments, GetEvents} from "@/api.js";
 
 
-let listOfEventsOriginal = [];
-const listOfEvents = ref([])
+let listOfDocumentsOriginal = [];
+const listOfDocuments = ref([])
 const searchModel = defineModel()
 
-GetEvents().then((events) => {
-  console.log(events);
-  listOfEventsOriginal = events;
-  listOfEvents.value = listOfEventsOriginal;
+GetDocuments().then((documents) => {
+  console.log(documents);
+  listOfDocumentsOriginal = documents;
+  listOfDocuments.value = listOfDocumentsOriginal;
 })
 
-function searchEvent(event) {
+function searchDocuments(event) {
   if (event.target.value === "") {
-    listOfEvents.value = listOfEventsOriginal;
+    listOfDocuments.value = listOfDocumentsOriginal;
     return;
   }
-  listOfEvents.value = listOfEventsOriginal.filter((e) => e.name.toLowerCase().includes(event.target.value.toLowerCase()));
+  listOfDocuments.value = listOfDocumentsOriginal.filter((e) => e.name.toLowerCase().includes(event.target.value.toLowerCase()));
 }
-
 
 </script>
 
 <template>
   <main>
     <SideBar>
-      <SideBarTile title="Home" icon="Home" route="/hub" ></SideBarTile>
-      <SideBarTile title="Events" icon="Ticket" route="/events" selected></SideBarTile>
-      <SideBarTile title="Documents" icon="Document" route="/documents"></SideBarTile>
+      <SideBarTile title="Home" icon="Home" route="/hub"></SideBarTile>
+      <SideBarTile title="Events" icon="Ticket" route="/events"></SideBarTile>
+      <SideBarTile title="Documents" icon="Document" selected route="/documents"></SideBarTile>
       <SideBarTile title="Community" icon="People" route="/community"></SideBarTile>
-      <SideBarTile title="Boutique" icon="Shop"  route="/boutique"></SideBarTile>
+      <SideBarTile title="Boutique" icon="Shop" route="/boutique"></SideBarTile>
     </SideBar>
     <div class="main-data">
       <Topbar>
-          <input type="text" class="searcher" placeholder="Cerca evento" @input="searchEvent($event)" v-model="searchModel">
+        <input type="text" class="searcher" placeholder="Cerca documento" @input="searchDocuments($event)" v-model="searchModel">
       </Topbar>
       <div class="main-content">
-        <div class="toolbar-buttons">
-        </div>
-        <EventBlock v-for="event in listOfEvents" :event="event"></EventBlock>
+        <DocumentBlock v-for="document in listOfDocuments" :documentData="document"></DocumentBlock>
       </div>
     </div>
   </main>
+
 </template>
 
 <style scoped>

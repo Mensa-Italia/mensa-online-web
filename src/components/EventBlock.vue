@@ -1,6 +1,6 @@
 <script setup>
 
-import {ImageUrl} from "@/api.js";
+import {FileUrl} from "@/api.js";
 
 defineProps({
   event: Object
@@ -16,7 +16,7 @@ function Iso8601ToDateFormatted(iso8601) {
 
 <template>
   <div class="event-block">
-    <img class="event-image" :src="ImageUrl(event, event.image)"/>
+    <img class="event-image" :src="FileUrl(event, event.image)"/>
     <div class="event-info">
       <h3>{{ event.name }}</h3>
       <p class="wrap2">{{ event.description }}</p>
@@ -39,7 +39,6 @@ function Iso8601ToDateFormatted(iso8601) {
   border-radius: 1rem;
   justify-content: start;
   transition: all 0.5s;
-  box-shadow: 0 0 10px rgba(0, 0, 0, .1);
   background-color: var(--color-background);
   cursor: pointer;
   width: 80%;

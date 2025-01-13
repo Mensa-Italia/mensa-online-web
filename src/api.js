@@ -28,7 +28,6 @@ export const Login = async (email, password) => {
             pb.collection('users').getList(1, 50, {}).then(response => {
                 console.log(response)
             })
-
         })
 }
 
@@ -40,7 +39,7 @@ export const GetUser = () => {
     return pb.authStore.record;
 }
 
-export const ImageUrl = (record, firstFilename) => {
+export const FileUrl = (record, firstFilename) => {
     return pb.files.getURL(record, firstFilename);
 }
 
@@ -58,7 +57,30 @@ export const GetEvents = async () => {
     }).then(response => response)
 }
 
+export const GetDocuments = async () => {
+    return await pb.collection('documents').getFullList(
+        {
+            sort: "-created",
+        }
+    ).then(response => response)
+}
+
 export const GetUserChart = async () => {
     return await pb.collection('view_chart_daily_users').getFullList().then(response => response)
+}
 
+export const GetCommunities = async () => {
+    return await pb.collection('sigs').getFullList(
+        {
+            sort: "name",
+        }
+    ).then(response => response)
+}
+
+export const GetBoutiqueProducts = async () => {
+    return await pb.collection('boutique').getFullList(
+        {
+            sort: "name",
+        }
+    ).then(response => response)
 }

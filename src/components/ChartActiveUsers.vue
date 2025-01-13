@@ -94,6 +94,13 @@ const chartOptions = {
       enabled: false
     },
   },
+  events: [],
+  onHover: (event) => {
+    event.native.target.style.cursor = 'default';
+  },
+  hover: {
+    mode: null
+  },
   maintainAspectRatio: true,
 }
 
@@ -124,7 +131,6 @@ const chartOptions = {
   aspect-ratio: 16/9;
   width: 100%;
   max-width: 500px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   overflow: hidden;
   display: flex;
   flex-direction: column;

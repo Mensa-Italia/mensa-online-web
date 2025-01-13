@@ -3,6 +3,7 @@
 import SideBarTile from "@/components/SideBarTile.vue";
 import {Logout} from "@/api.js";
 import {useRouter} from "vue-router";
+import DownloadApp from "@/components/DownloadApp.vue";
 
 const router = useRouter();
 
@@ -20,6 +21,7 @@ function FullLogout(){
     <img class="logo hide-on-desktop" src="/icon.svg"/>
     <slot></slot>
     <div class="Spacer"></div>
+    <DownloadApp></DownloadApp>
     <SideBarTile title="Logout" icon="LogoutCurve" color="red" :on-click="FullLogout" ></SideBarTile>
   </div>
 </template>
@@ -42,7 +44,6 @@ function FullLogout(){
     background-color: var(--color-background);
     padding: 1rem;
     width: 300px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, .1);
     display: flex;
     flex-direction: column;
     gap: .5rem;
