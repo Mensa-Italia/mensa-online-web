@@ -33,9 +33,11 @@ import {GetUser, FileUrl} from "@/api.js";
 
 .topbar {
   padding: 1rem;
+  position: sticky;
   display: flex;
   align-items: center;
   gap: 1rem;
+  grid-area: topbar;
 }
 
 .spacer {

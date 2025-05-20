@@ -42,11 +42,22 @@ function searchDocuments(event) {
     </SideBar>
     <div class="main-data">
       <Topbar>
-        <input type="text" class="searcher" placeholder="Cerca documento" @input="searchDocuments($event)" v-model="searchModel">
+        <input type="text" class="searcher" placeholder="Cerca documento" @input="searchDocuments($event)"
+               v-model="searchModel">
       </Topbar>
       <div class="main-content">
         <DocumentBlock v-for="document in listOfDocuments" :documentData="document"></DocumentBlock>
       </div>
+    </div>
+    <div class="side-data">
+      <ul>
+        <li>Documenti</li>
+        <li>Eventi</li>
+        <li>Comunicati</li>
+        <li>News</li>
+        <li>Guide</li>
+        <li>FAQ</li>
+      </ul>
     </div>
   </main>
 
@@ -55,18 +66,23 @@ function searchDocuments(event) {
 <style scoped>
 main {
   display: grid;
-  grid-template-columns: 300px minmax(0, 100%);
+  grid-template-areas:
+    "sidebar topbar topbar"
+    "sidebar main-data side-data";
+  grid-template-columns: 200px minmax(0, 1fr) 300px;
+  grid-template-rows: 100px minmax(0, 1fr);
   min-height: 100vh;
   transition: all 0.5s;
 }
 
 .main-data {
   min-height: 100vh;
-  height: 100%;
   width: 100%;
+  height: 100%;
   background-color: var(--color-background-mute);
   display: flex;
   flex-direction: column;
+  grid-area: main-data;
 }
 
 .main-content {
@@ -78,11 +94,13 @@ main {
   align-items: center;
 }
 
-.toolbar-buttons {
+.side-data {
   display: flex;
-  justify-content: flex-end;
-  width: 80%;
+  flex-direction: column;
   gap: 1rem;
+  padding: 1rem;
+  background-color: var(--color-background-mute);
+  grid-area: side-data;
 }
 
 .searcher {

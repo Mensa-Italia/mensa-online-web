@@ -15,7 +15,6 @@ function FullLogout(){
 </script>
 
 <template>
-  <div class="sidebar-filler"></div>
   <div class="sidebar">
     <img class="logo hide-on-mobile" src="/logo_horizontal.png"/>
     <img class="logo hide-on-desktop" src="/icon.svg"/>
@@ -43,14 +42,14 @@ function FullLogout(){
   .sidebar{
     background-color: var(--color-background);
     padding: 1rem;
-    width: 300px;
     display: flex;
     flex-direction: column;
     gap: .5rem;
     top: 0;
     bottom: 0;
     left: 0;
-    position: fixed;
+    height: 100vh;
+    position: sticky;
     animation: slide 0.5s;
     transition: width 0.5s;
   }
@@ -72,14 +71,6 @@ function FullLogout(){
 
 
   @media (max-width: 900px) {
-    .sidebar {
-      width: 100px;
-    }
-
-    .sidebar-filler{
-      width: 100px;
-    }
-
     .hide-on-mobile{
       display: none;
     }
