@@ -4,15 +4,17 @@
 </script>
 
 <template>
-    <div class="background-image-splash">
-      <div class="container">
-        <div class="logo">LOGO</div>
-        <div class="spacer"></div>
-        <h1>"Simply a group of friend who reuinite every once in a year"</h1>
-        <p>Simone Ferrari</p>
-        <p class="author">Presidente</p>
+  <div class="background-image-splash">
+    <div class="container">
+      <div class="logo">
+        <img src="/icon_white.svg" alt="LOGO" />
       </div>
+      <div class="spacer"></div>
+      <h1>"Simply a group of friend who reuinite every once in a year"</h1>
+      <p>Simone Ferrari</p>
+      <p class="author">Presidente</p>
     </div>
+  </div>
 </template>
 
 <style scoped>
@@ -36,8 +38,7 @@
   height: 100%;
   width: 100%;
   color: white;
-  padding: 2em;
-  padding-top: 1em;
+  padding: 2rem;
   background: linear-gradient(to bottom, rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.6));
 }
 
@@ -64,7 +65,14 @@
 .background-image-splash .logo {
   font-size: 3em;
   font-weight: bold;
-  margin-bottom: 1em;
+  width: 100px;
+  height: 100px;
+}
+
+
+.background-image-splash .logo img {
+  width: 100%;
+  height: 100%;
 }
 
 .background-image-splash .spacer {
