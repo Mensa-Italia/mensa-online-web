@@ -6,6 +6,7 @@ import Documents from "@/pages/Documents.vue";
 import Community from "@/pages/Community.vue";
 import Boutique from "@/pages/Boutique.vue";
 import DocumentsNew from "@/pages/DocumentsNew.vue";
+import LoginLayout from "@/layouts/LoginLayout.vue";
 
 
 const routes = [

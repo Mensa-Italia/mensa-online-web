@@ -64,8 +64,11 @@
     font-family: Gotham, serif;
 }
 
+html{
+    height: 100%;
+}
+
 body {
-    min-height: 100vh;
     color: var(--color-text);
     background: var(--color-background);
     transition: color 0.5s,
@@ -87,5 +90,5 @@ body {
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+     min-height: 100%;
 }
-
