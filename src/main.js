@@ -1,14 +1,17 @@
-import './assets/main.css'
-
 import { createApp } from 'vue'
-import App from './App.vue'
-import router from "@/router.js";
-import pinia from "@/statemanager.js";
-import {VsxIcon} from "vue-iconsax";
+import { createPinia } from 'pinia'
 
+import App from './App.vue'
+import router from './router'
+// Global styles: Bootstrap first so local component styles can override
+import 'bootstrap/dist/css/bootstrap.min.css'
+// If JS components (modals, dropdowns) are needed later, uncomment below:
+// import 'bootstrap'
+import '@/assets/theme.css'
 
 const app = createApp(App)
-app.component("VsxIcon", VsxIcon);
+
+app.use(createPinia())
 app.use(router)
-app.use(pinia)
+
 app.mount('#app')
