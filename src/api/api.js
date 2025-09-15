@@ -117,7 +117,7 @@ export const GetBoutiqueProducts = async () => {
 export const GetMembers = async () => {
     return await pb.collection('members_registry').getFullList(
         {
-            sort: "-created",
+            sort: "name",
         }
     ).then(response => response)
 }

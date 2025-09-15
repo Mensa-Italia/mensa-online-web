@@ -48,7 +48,7 @@ export const useMembersStore = defineStore('members', () => {
       created: record.created,
       updated: record.updated,
       is_active: record.is_active,
-      image: record.image ? `https://svc.mensa.it/api/files/${record.collectionId || 'members_registry'}/${record.id}/${record.image}` : '',
+      image: record.image ? `https://svc.mensa.it/api/files/${record.collectionId || 'members_registry'}/${record.id}/${record.image}?thumb=0x100` : '',
       full_data: fullData,
       full_profile_link: record.profile_link || record.full_profile_link || '',
     }
