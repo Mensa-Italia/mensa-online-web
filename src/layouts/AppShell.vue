@@ -1,7 +1,7 @@
 <script setup>
 import { ref, watch, onMounted, onBeforeUnmount } from 'vue'
 import { useRoute, RouterLink, RouterView } from 'vue-router'
-import { LayoutDashboard, Store, BookUser, FileBox, Calendar } from 'lucide-vue-next'
+import { LayoutDashboard, Store, BookUser, FileBox, Calendar, History } from 'lucide-vue-next'
 import { useAuthStore } from '@/stores/auth'
 
 // State
@@ -40,6 +40,9 @@ function doLogout() {
 function getUserAvatarUrl(user) {
   return user?.avatar ? `https://svc.mensa.it/api/files/${user.collectionId || 'users'}/${user.id}/${user.avatar}` : ''
 }
+
+// External / legacy portal link (configurable via env var, fallback root)
+const area32Url = 'https://www.cloud32.it/Associazioni/utenti/login?codass=170734'
 
 const nav = [
   { to: '/', label: 'Dashboard', icon: LayoutDashboard },
@@ -93,6 +96,10 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKeydown))
             <div class="user-id sidebar-text">{{ auth.user?.id }}</div>
           </div>
         </RouterLink>
+          <a :href="area32Url" class="legacy-link btn btn-sm btn-outline-light w-100 mb-2" rel="noopener">
+            <History class="nav-icon" style="margin-right:4px" />
+            Torna ad Area32
+          </a>
           <button class="btn btn-sm btn-outline-light w-100" @click="doLogout">Logout</button>
         </div>
         <div class="sidebar-footer small">

@@ -257,8 +257,6 @@ body {
 }
 .filter-toolbar input.filter-input,
 .filter-toolbar select.filter-select {
-  background: rgba(17, 23, 39, 0.55);
-  border: 1px solid rgba(255, 255, 255, 0.18);
   color: var(--color-text-primary);
   font-size: 0.7rem;
   padding: 0.5rem 0.65rem 0.45rem 2rem;

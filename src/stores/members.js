@@ -9,9 +9,6 @@ import { GetMembers } from '@/api/api'
 export const useMembersStore = defineStore('members', () => {
   const members = ref([
     // initial mock data trimmed; will be replaced after PB load
-    { id: 1, name: 'Alice Bianchi', email: 'alice@example.com', region: 'Lombardia', joined: '2023-02-14' },
-    { id: 2, name: 'Bruno Verdi', email: 'bruno@example.com', region: 'Lazio', joined: '2022-11-03' },
-    { id: 3, name: 'Carla Neri', email: 'carla@example.com', region: 'Toscana', joined: '2024-06-21' },
   ])
 
   const loading = ref(false)

@@ -85,18 +85,29 @@ const hasFilters = computed(() => !!(props.modelValue || props.filterItem))
 </template>
 
 <style scoped>
-/* Filters bar (reverted) */
-.filters-bar { display:flex; flex-wrap:wrap; gap:.65rem .9rem; align-items:center; padding:.25rem .2rem 0; }
-.filters-bar .field { position:relative; display:flex; align-items:center; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.08); border-radius:.75rem; padding:0 .55rem; height:38px; backdrop-filter:blur(10px) saturate(140%); }
-.filters-bar .field.inline { flex:1 1 220px; min-width:200px; }
-.filters-bar .icon-leading { width:16px; height:16px; opacity:.6; margin-right:.4rem; }
-.filter-input, .filter-select { background:transparent; border:none; outline:none; color:#f1f5f9; font-size:.7rem; width:100%; }
-.filter-select { padding:.35rem 0; }
+/* Filter toolbar */
+.filter-toolbar { display:flex; flex-wrap:wrap; gap:.65rem .9rem; align-items:center; padding:.25rem .2rem 0; }
+.filter-toolbar.dense { gap:.45rem .6rem; }
+.filter-toolbar .field { position:relative; display:flex; align-items:center; background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.08); border-radius:.75rem; padding:0 .55rem; height:38px; backdrop-filter:blur(10px) saturate(140%); transition:border-color .2s ease, box-shadow .2s ease; }
+.filter-toolbar .field.inline { flex:1 1 220px; min-width:200px; }
+.filter-toolbar .field.region { min-width:180px; }
+.filter-toolbar .field:focus-within { border-color:rgba(255,255,255,0.22); box-shadow:0 0 0 2px rgba(255,255,255,0.05); }
+.filter-toolbar .icon-leading { width:16px; height:16px; opacity:.6; margin-right:.4rem; flex-shrink:0; }
+.filter-input,
+.filter-select { background:transparent; border:none; outline:none; color:#f1f5f9; font-size:.7rem; width:100%; }
 .filter-input::placeholder { color:rgba(241,245,249,0.45); }
+.filter-select { padding:.35rem 1.2rem .35rem 0; -webkit-appearance:none; appearance:none; line-height:1.2; cursor:pointer; }
+.filter-select:-moz-focusring { color:transparent; text-shadow:0 0 0 #f1f5f9; }
+.filter-toolbar .field.region::after { content:""; position:absolute; right:.65rem; top:50%; width:0; height:0; pointer-events:none; border-left:4px solid transparent; border-right:4px solid transparent; border-top:5px solid rgba(241,245,249,0.7); transform:translateY(-30%); }
+.filter-toolbar .field.region:focus-within::after { border-top-color:#fff; }
+.filter-input::-webkit-search-decoration,
+.filter-input::-webkit-search-cancel-button,
+.filter-input::-webkit-search-results-button,
+.filter-input::-webkit-search-results-decoration { display:none; }
 .clear-btn { background:rgba(255,255,255,0.06); color:#e2e8f0; border:1px solid rgba(255,255,255,0.1); border-radius:.65rem; font-size:.6rem; padding:.45rem .7rem; cursor:pointer; letter-spacing:.5px; font-weight:600; }
 .clear-btn:hover { background:rgba(255,255,255,0.12); }
 .results-chip { font-size:.55rem; padding:.4rem .65rem; border-radius:.55rem; background:rgba(255,255,255,0.07); letter-spacing:.5px; font-weight:600; }
-.filters-bar select option { color:#0f172a; }
+.filter-toolbar select option { color:#0f172a; }
 /* Reinvented 16:9 tile layout */
 .events-grid { display:grid; gap:1.1rem; grid-template-columns:repeat(auto-fill,minmax(320px,1fr)); }
 @media (min-width:1600px) { .events-grid { grid-template-columns:repeat(auto-fill,minmax(360px,1fr)); gap:1.25rem; } }
