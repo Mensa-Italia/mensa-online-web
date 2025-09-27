@@ -15,7 +15,7 @@ function mapEventRecord(r) {
     isNational: !!r.is_national || !!r.isNational,
     isSpot: !!r.is_spot || !!r.isSpot,
     image:  r.image ? `https://svc.mensa.it/api/files/${r.collectionId || 'events'}/${r.id}/${r.image}` : '',
-    position: r.position || null,
+    position: r.expand.position || r.position || null,
     owner: r.owner || null,
     created: r.created ? new Date(r.created) : null,
     updated: r.updated ? new Date(r.updated) : null,

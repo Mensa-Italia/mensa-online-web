@@ -67,7 +67,6 @@ export const GetEvents = async () => {
         sort: "when_start",
         expand: "position"
     }).then(response => {
-        
         return response
     })
 }

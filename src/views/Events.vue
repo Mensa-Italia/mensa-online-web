@@ -1,5 +1,6 @@
 <script setup>
 import { onMounted, ref, computed, watch, onBeforeUnmount } from 'vue'
+import { useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { useEventsStore } from '@/stores/events'
 import PageHeader from '@/components/PageHeader.vue'
@@ -66,28 +67,11 @@ function clearFilters() {
   region.value = ''
 }
 
-// Detail panel state
-const selectedEvent = ref(null)
-const panelOpen = ref(false)
-
+// Navigate to dedicated event detail page instead of side panel
+const router = useRouter()
 function openEvent(ev) {
-  selectedEvent.value = ev
-  panelOpen.value = true
-  // lock body scroll simple approach
-  document.documentElement.style.overflow = 'hidden'
+  router.push({ name: 'EventDetail', params: { id: ev.id } })
 }
-
-function closePanel() {
-  panelOpen.value = false
-  selectedEvent.value = null
-  document.documentElement.style.overflow = ''
-}
-
-function onKey(e) {
-  if (e.key === 'Escape' && panelOpen.value) closePanel()
-}
-window.addEventListener('keydown', onKey)
-onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
 
 import { linkify } from '@/api/linkify'
 
@@ -190,70 +174,6 @@ function formatDuration(start, end) {
       </article>
     </div>
     <div v-else-if="!loading && !error" class="empty">No events match your filters.</div>
-    <!-- Detail side panel -->
-    <div v-if="panelOpen" class="ev-panel-overlay" @click.self="closePanel">
-      <aside class="ev-panel" role="dialog" :aria-label="selectedEvent?.name || 'Event details'" v-if="selectedEvent">
-        <div class="panel-hero" v-if="selectedEvent.image">
-          <img :src="selectedEvent.image" :alt="selectedEvent.name" />
-          <div class="ph-overlay"></div>
-          <div class="ph-badges">
-            <span class="ph-badge" :class="{ national: selectedEvent.isNational, spot: selectedEvent.isSpot }">
-              <span v-if="selectedEvent.isNational">National</span>
-              <span v-else-if="selectedEvent.isSpot">Spot</span>
-              <span v-else>Event</span>
-            </span>
-            <span class="ph-status" :class="eventStatus(selectedEvent)">{{ eventStatus(selectedEvent) }}</span>
-          </div>
-        </div>
-        <header class="panel-header">
-          <h2 class="panel-title">{{ selectedEvent.name }}</h2>
-          <button class="close-btn" @click="closePanel" aria-label="Close details">×</button>
-        </header>
-        <section class="panel-timeline">
-          <div class="time-block">
-            <span class="label">Start</span>
-            <span class="value">{{ formatDate(selectedEvent.whenStart) }}</span>
-            <span class="sub">{{ formatTime(selectedEvent.whenStart) }}</span>
-          </div>
-          <div class="time-sep">→</div>
-            <div class="time-block">
-            <span class="label">End</span>
-            <span class="value">{{ formatDate(selectedEvent.whenEnd) }}</span>
-            <span class="sub">{{ formatTime(selectedEvent.whenEnd) }}</span>
-          </div>
-          <div class="duration" v-if="formatDuration(selectedEvent.whenStart, selectedEvent.whenEnd)">
-            {{ formatDuration(selectedEvent.whenStart, selectedEvent.whenEnd) }}
-          </div>
-        </section>
-        <div class="panel-actions" v-if="selectedEvent.bookingLink">
-          <a v-if="selectedEvent.bookingLink" :href="selectedEvent.bookingLink" target="_blank" rel="noopener" class="pa-btn book">Book</a>
-        </div>
-        <div class="panel-meta" v-if="selectedEvent">
-          <div class="meta-row" v-if="selectedEvent.position?.state">
-            <span class="meta-label">Location</span>
-            <span class="meta-value">{{ selectedEvent.position.state }}</span>
-          </div>
-          <div class="meta-row" v-if="selectedEvent.contact">
-            <span class="meta-label">Contact</span>
-            <span class="meta-value" v-html="linkify(selectedEvent.contact)"></span>
-          </div>
-        </div>
-        <div class="panel-body">
-          <h3 class="section-heading" v-if="selectedEvent.description">Description</h3>
-          <div class="richtext" v-if="selectedEvent.description" v-html="linkify(selectedEvent.description)"></div>
-        </div>
-        <footer class="panel-footer">
-          <div class="footer-left" v-if="selectedEvent.contact">
-            <span class="contact-label">Contact:</span>
-            <span class="contact-value" v-html="linkify(selectedEvent.contact)"></span>
-          </div>
-          <div class="footer-actions">
-            <a v-if="selectedEvent.infoLink" :href="selectedEvent.infoLink" target="_blank" rel="noopener" class="pa-btn info">Info</a>
-            <a v-if="selectedEvent.bookingLink" :href="selectedEvent.bookingLink" target="_blank" rel="noopener" class="pa-btn book alt">Book</a>
-          </div>
-        </footer>
-      </aside>
-    </div>
   </div>
 </template>
 
@@ -346,58 +266,6 @@ function formatDuration(start, end) {
   .tile-footer { padding:0 .65rem .65rem; }
 }
 
-/* Side panel */
-.ev-panel-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.55); backdrop-filter:blur(4px); display:flex; justify-content:flex-end; z-index:80; }
-.ev-panel { width:min(520px,100%); height:100%; background:rgba(15,23,42,0.98); border-left:1px solid rgba(255,255,255,0.08); box-shadow:-4px 0 24px -6px rgba(0,0,0,0.5); display:flex; flex-direction:column; animation:slideIn .35s cubic-bezier(.4,.12,.2,1); }
-@keyframes slideIn { from { transform:translateX(40px); opacity:0; } to { transform:translateX(0); opacity:1; } }
-.panel-header { display:flex; align-items:center; justify-content:space-between; padding:1rem 1.2rem .75rem; gap:1rem; }
-.panel-title { margin:0; font-size:1.05rem; font-weight:600; letter-spacing:.4px; }
-.close-btn { background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.12); border-radius:.6rem; width:34px; height:34px; font-size:1.1rem; line-height:1; color:#e2e8f0; cursor:pointer; display:flex; align-items:center; justify-content:center; }
-.close-btn:hover { background:rgba(255,255,255,0.12); }
-.panel-hero { position:relative; width:100%; aspect-ratio:16/9; overflow:hidden; background:linear-gradient(135deg,#1e293b,#0f172a); }
-.panel-hero img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; filter:saturate(110%) contrast(1.05); }
-.panel-hero .ph-overlay { position:absolute; inset:0; background:linear-gradient(180deg,rgba(0,0,0,0) 40%,rgba(0,0,0,0.72) 95%); }
-.ph-badges { position:absolute; left:.9rem; bottom:.65rem; display:flex; gap:.55rem; align-items:center; }
-.ph-badge { font-size:.55rem; padding:.3rem .65rem; border-radius:.65rem; font-weight:600; letter-spacing:.6px; text-transform:uppercase; background:rgba(51,65,85,0.6); backdrop-filter:blur(6px) saturate(160%); }
-.ph-badge.national { background:linear-gradient(135deg,#0284c7,#0ea5e9); }
-.ph-badge.spot { background:linear-gradient(135deg,#7e22ce,#a855f7); }
-.ph-status { font-size:.55rem; padding:.3rem .65rem; border-radius:.65rem; font-weight:600; text-transform:uppercase; letter-spacing:.6px; background:rgba(30,41,59,0.7); backdrop-filter:blur(6px) saturate(160%); }
-.ph-status.upcoming { background:linear-gradient(135deg,#0d9488,#14b8a6); }
-.ph-status.ongoing { background:linear-gradient(135deg,#d97706,#f59e0b); }
-.ph-status.past { background:linear-gradient(135deg,#334155,#1e293b); opacity:.8; }
-
-.panel-timeline { display:flex; align-items:stretch; gap:.95rem; padding:.4rem 1.2rem 1rem; position:relative; }
-.time-block { display:flex; flex-direction:column; gap:.15rem; font-size:.6rem; min-width:80px; }
-.time-block .label { font-size:.55rem; text-transform:uppercase; opacity:.65; letter-spacing:.5px; }
-.time-block .value { font-weight:600; font-size:.65rem; }
-.time-block .sub { font-size:.55rem; opacity:.75; }
-.time-sep { align-self:center; font-size:.75rem; opacity:.55; }
-.duration { margin-left:auto; align-self:center; font-size:.55rem; background:rgba(255,255,255,0.06); padding:.3rem .55rem; border-radius:.6rem; font-weight:600; letter-spacing:.5px; }
-
-.panel-actions { display:flex; gap:.65rem; padding:0 1.2rem .9rem; }
-.pa-btn { font-size:.55rem; padding:.5rem .9rem; border-radius:.7rem; font-weight:600; letter-spacing:.55px; text-decoration:none; display:inline-flex; align-items:center; backdrop-filter:blur(6px) saturate(150%); }
-.pa-btn.info { background:rgba(255,255,255,0.08); color:#e2e8f0; }
-.pa-btn.info:hover { background:rgba(255,255,255,0.15); }
-.pa-btn.book { background:linear-gradient(135deg,#0ea5e9,#38bdf8); color:#fff; }
-.pa-btn.book:hover { filter:brightness(1.08); }
-
-.panel-meta { display:flex; flex-direction:column; gap:.55rem; padding:0 1.2rem 1rem; font-size:.6rem; }
-.meta-row { display:flex; gap:.75rem; }
-.meta-label { width:70px; opacity:.6; text-transform:uppercase; letter-spacing:.5px; font-size:.55rem; }
-.meta-value { flex:1 1 auto; font-size:.6rem; }
-.meta-value.status.upcoming { color:#14b8a6; }
-.meta-value.status.ongoing { color:#f59e0b; }
-.meta-value.status.past { color:#64748b; }
-.pm-badge { font-size:.55rem; padding:.25rem .55rem; border-radius:.6rem; font-weight:600; text-transform:uppercase; letter-spacing:.5px; background:rgba(51,65,85,0.6); color:#f1f5f9; }
-.pm-badge.national { background:linear-gradient(135deg,#0284c7,#0ea5e9); color:#f0f9ff; }
-.pm-badge.spot { background:linear-gradient(135deg,#7e22ce,#a855f7); color:#faf5ff; }
-.pm-date, .pm-loc { display:inline-flex; align-items:center; gap:.35rem; }
-.pm-book { font-size:.55rem; padding:.4rem .7rem; border-radius:.6rem; font-weight:600; letter-spacing:.55px; text-decoration:none; background:linear-gradient(135deg,#0ea5e9,#38bdf8); color:#fff; }
-.pm-book:hover { filter:brightness(1.08); }
-.panel-body { flex:1 1 auto; overflow-y:auto; padding:.2rem 1.2rem 1.2rem; }
-.panel-body .richtext { font-size:.72rem; line-height:1.35; word-break:break-word; }
-.panel-body .richtext p { margin:.55rem 0; }
-.panel-body .richtext br + br { line-height:2; }
 .panel-body .richtext a { color:#38bdf8; text-decoration:underline; text-underline-offset:2px; }
 .panel-body .richtext a:hover { color:#7dd3fc; }
 .panel-body .richtext strong { font-weight:600; }
