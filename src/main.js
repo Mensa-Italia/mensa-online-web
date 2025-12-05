@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import { useAuthStore } from '@/stores/auth'
 
 import App from './App.vue'
 import router from './router'
@@ -36,7 +37,16 @@ try {
 
 const app = createApp(App)
 
-app.use(createPinia())
+const pinia = createPinia()
+app.use(pinia)
 app.use(router)
+
+// After pinia + router, refresh user if already logged (updates powers/roles)
+try {
+	const auth = useAuthStore()
+	if (auth.authenticated) {
+		auth.refresh()
+	}
+} catch (e) { /* ignore bootstrap errors */ }
 
 app.mount('#app')

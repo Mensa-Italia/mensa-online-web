@@ -44,6 +44,7 @@ Copy `.env.example` to `.env` and set:
 
 ```
 VITE_PB_URL=http://127.0.0.1:8090
+VITE_GOOGLE_MAPS_API_KEY=your_key_here
 ```
 
 ### Expected Collection
@@ -76,3 +77,19 @@ File URLs are generated via `pb.files.getUrl(record, record.image)`. If the file
 - For auth: leverage `pb.collection('users').authWithPassword(...)` and store tokens in `authStore`.
 - For pagination: replace `getList(1, 200)` with dynamic page parameters; maintain `page`/`perPage` refs in the store.
 - For caching: persist `members` to `localStorage` with a timestamp and only refetch after a TTL.
+
+## Position Picker (Google Maps)
+
+The position picker view (`PositionPicker.vue`) uses the Google Maps JavaScript API with Places Autocomplete.
+
+Environment variable required:
+
+```
+VITE_GOOGLE_MAPS_API_KEY=YOUR_KEY
+```
+
+Enable and restrict (recommended):
+- Maps JavaScript API
+- Places API
+
+You can optionally restrict the key by HTTP referrers (production domains) and specific APIs.

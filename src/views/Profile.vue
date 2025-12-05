@@ -1,5 +1,7 @@
 <script setup>
 import { ref, computed, watch } from 'vue'
+import PageHeader from '@/components/PageHeader.vue'
+import SubNav from '@/components/SubNav.vue'
 import { useAuthStore } from '@/stores/auth'
 import { pb } from '@/api/api'
 
@@ -85,16 +87,31 @@ async function save() {
 function reset() {
   initFromUser()
 }
+
+// Sub navigation config (could be reused across pages)
+const activeSection = ref('profile')
+const sections = [
+  { key: 'profile', label: 'Profile' },
+  { key: 'payments', label: 'Payment Methods' },
+  { key: 'receipts', label: 'Your Receipt' },
+  { key: 'devices', label: 'Devices' },
+]
 </script>
 
 <template>
-  <div class="profile-wrapper">
-    <div class="panel">
-      <div class="panel-header">
-        <h2 class="title">Profile</h2>
-        <p class="subtitle">Manage your personal information.</p>
-      </div>
-      <form class="form" @submit.prevent="save">
+  <div class="profile-page-root">
+    <PageHeader title="Profile" subtitle="Manage your account preferences" />
+
+    <SubNav v-model="activeSection" :items="sections" />
+
+    <!-- PROFILE SECTION -->
+  <div v-if="activeSection === 'profile'" class="profile-wrapper">
+      <div class="panel">
+        <div class="panel-header">
+          <h2 class="title">Profile</h2>
+          <p class="subtitle">Manage your personal information.</p>
+        </div>
+        <form class="form" @submit.prevent="save">
         <div class="avatar-row">
           <div class="avatar-stack">
             <div class="avatar-frame" :class="{ placeholder: !avatarPreview }">
@@ -152,12 +169,39 @@ function reset() {
             <span v-else>Saving...</span>
           </button>
         </div>
-      </form>
+        </form>
+      </div>
+    </div>
+
+    <!-- PAYMENT METHODS SECTION -->
+  <div v-else-if="activeSection === 'payments'" class="placeholder-section">
+      <div class="panel">
+        <div class="panel-header"><h2 class="title">Payment Methods</h2><p class="subtitle">Add or manage your saved payment options.</p></div>
+        <div class="coming-soon">Payment methods management will appear here.</div>
+      </div>
+    </div>
+
+    <!-- RECEIPTS SECTION -->
+  <div v-else-if="activeSection === 'receipts'" class="placeholder-section">
+      <div class="panel">
+        <div class="panel-header"><h2 class="title">Your Receipt</h2><p class="subtitle">Download or review your membership receipts.</p></div>
+        <div class="coming-soon">Receipts history will appear here.</div>
+      </div>
+    </div>
+
+    <!-- DEVICES SECTION -->
+  <div v-else-if="activeSection === 'devices'" class="placeholder-section">
+      <div class="panel">
+        <div class="panel-header"><h2 class="title">Devices</h2><p class="subtitle">Manage devices authorized to access your account.</p></div>
+        <div class="coming-soon">Connected devices & session controls will appear here.</div>
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
+.profile-page-root { display:flex; flex-direction:column; gap:0.85rem; }
+
 .profile-wrapper { max-width: 880px; margin: 0 auto; width:100%; display:flex; flex-direction:column; gap:1.5rem; }
 .panel { background:rgba(15,23,42,0.82); border:1px solid rgba(255,255,255,0.07); border-radius:1.2rem; padding:1.75rem 1.6rem 2.1rem; box-shadow:0 2px 18px -8px rgba(0,0,0,0.4), 0 0 0 1px rgba(255,255,255,0.04); backdrop-filter:blur(14px) saturate(150%); }
 .panel-header { margin-bottom:1.4rem; }
@@ -211,4 +255,7 @@ function reset() {
 /* Smooth success fade */
 .alert.success { animation:fadeSlide .6s ease; }
 @keyframes fadeSlide { 0% { opacity:0; transform:translateY(-4px);} 100% { opacity:1; transform:translateY(0);} }
+
+/* Placeholder sections */
+.placeholder-section .coming-soon { font-size:.75rem; opacity:.75; padding:.5rem 0; }
 </style>

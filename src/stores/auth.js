@@ -64,5 +64,34 @@ export const useAuthStore = defineStore('auth', () => {
     }
   }
 
-  return { user, loading, error, authenticated, login, logout, updateProfile }
+  // Refresh the user record from backend if token still valid
+  async function refresh() {
+    if (!pb.authStore.isValid || !pb.authStore.token) return
+    try {
+      // Generic self record fetch: rely on collection name or fallback 'users'
+      const current = GetUser()
+      if (!current) return
+      const collection = current.collectionName || current.collectionId || 'users'
+      const latest = await pb.collection(collection).getOne(current.id)
+      // Update auth store with same token but new model
+      pb.authStore.save(pb.authStore.token, latest)
+      user.value = latest
+      authenticated.value = isLogged() && !!user.value
+    } catch (e) {
+      // If refresh fails (e.g., revoked), clear state
+      console.warn('User refresh failed', e)
+    }
+  }
+
+  function hasPower(power) {
+    if (!user.value || !power) return false
+    const raw = user.value.powers
+    let list = []
+    if (Array.isArray(raw)) list = raw
+    else if (typeof raw === 'string') list = raw.split(/[\s,]+/).filter(Boolean)
+    if (list.includes('super')) return true
+    return list.includes(power)
+  }
+
+  return { user, loading, error, authenticated, login, logout, updateProfile, refresh, hasPower }
 })
